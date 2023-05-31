@@ -14,6 +14,7 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
+import GoogleButton from "react-google-button";
 
 // Your web app's Firebase configuration
 
@@ -208,7 +209,9 @@ function SignUpSide() {
                 >
                   OR
                 </p> */}
-                <Button
+
+                <GoogleButton type="light" onClick={signInWithGoogle} />
+                {/* <Button
                   fullWidth
                   variant="contained"
                   color="primary"
@@ -229,7 +232,7 @@ function SignUpSide() {
                   }}
                 >
                   Sign Up with Google
-                </Button>
+                </Button> */}
                 <Grid container justifyContent="flex-end">
                   <Grid item>
                     <Link to="/login" variant="body2">
