@@ -238,7 +238,7 @@ function Navbar(props) {
                     }}
                     startIcon={
                       <Badge badgeContent={items.length} color="primary">
-                        <ShoppingCartIcon />
+                        <ShoppingCartIcon sx={{ color: "white" }} />
                       </Badge>
                     }
                   ></Button>
