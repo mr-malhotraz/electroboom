@@ -17,6 +17,7 @@ import Button from "@mui/material/Button";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
+import "./navbar.css";
 import {
   AccountCircle,
   AddShoppingCart,
@@ -185,7 +186,6 @@ function Navbar(props) {
       <CssBaseline />
       <AppBar
         position="static"
-        className="nav-label"
         sx={{
           bgcolor: "black",
           position: "fixed",
@@ -225,10 +225,7 @@ function Navbar(props) {
             </Typography>
 
             <Button key={"cart.label"} disablePadding>
-              <Link
-                style={{ color: "white", textDecoration: "none" }}
-                to={"/shoppingcart"}
-              >
+              <Link style={{ color: "white" }} to={"/shoppingcart"}>
                 {
                   <Button
                     variant="text"
@@ -247,10 +244,10 @@ function Navbar(props) {
             </Button>
           </ThemeProvider>
 
-          <Box sx={{ display: { xs: "none", sm: "block" }, color: "white" }}>
+          <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((item) => (
-              <Button key={item.label} disablePadding sx={{ color: "white" }}>
-                <Link style={{ color: "white" }} to={item.path}>
+              <Button className="navv" key={item.label} disablePadding>
+                <Link className="aa" to={item.path}>
                   {item.label}
                 </Link>
               </Button>
