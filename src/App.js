@@ -17,7 +17,7 @@ import LoginPage from "./components/login";
 import RegistrationPage from "./components/registration";
 import ContactUsPage from "./components/contactus";
 import CheckoutPage from "./components/checkout";
-import ProductDetails from "./components/product-details";
+import React, { useState } from "react";
 
 function App() {
   return (

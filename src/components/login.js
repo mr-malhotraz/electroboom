@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Avatar from "@mui/material/Avatar";
@@ -13,51 +13,86 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+
+import firebase from "firebase/compat/app";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { auth } from "../context/firebase";
+import GoogleButton from "react-google-button";
+
+const signInWithGoogle = () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+
+  firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then((result) => {
+      // Handle successful sign-in with Google
+      console.log("Sign in with Google successful", result.user);
+    })
+    .catch((error) => {
+      // Handle sign-in with Google error
+      console.error("Error signing in with Google", error);
+    });
+};
 
 function SignInSide() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+  const [buttonLabel, setButtonLabel] = useState("Sign In");
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  const resetForm = () => {
+    setEmail("");
+    setPassword("");
+  };
+
+  const login = async () => {
+    if (user) {
+      // User is already signed in, no need to sign in again
+      toast.info("You are already signed in.", { position: "bottom-right" });
+      return;
+    }
+    setButtonLabel("Signing in..");
+    setTimeout(() => {
+      setButtonLabel("Sign in");
+    }, 1000);
+    try {
+      const user = await signInWithEmailAndPassword(auth, email, password);
+      console.log(user);
+      toast.success("Sign In Successful!", {
+        position: "bottom-right",
+      });
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.message, { position: "bottom-right" });
+    }
+  };
+
+  const logout = async () => {
+    await signOut(auth);
+    toast.success("Sign Out Successful!", {
+      position: "bottom-right",
+    });
+    resetForm(); // Reset the form after successful sign-out
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // Reset previous error states
-    setEmailError(false);
-    setPasswordError(false);
-
-    // Validate email format
-    if (!isValidEmail(email)) {
-      setEmailError(true);
-      return;
-    }
-
-    // Validate password format
-    if (!isValidPassword(password)) {
-      setPasswordError(true);
-      return;
-    }
-
-    // Perform login logic
-    if (email === "admin@electroboom.com" && password === "admin123") {
-      toast.success("Welcome!", { position: "bottom-right" }); // Display success message at the bottom-right
-      // Clear the form
-      setEmail("");
-      setPassword("");
-    } else {
-      toast.error("Invalid login", { position: "bottom-right" }); // Display error message at the bottom-right
-    }
-  };
-
-  const isValidEmail = (email) => {
-    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
-    return emailRegex.test(email);
-  };
-
-  const isValidPassword = (password) => {
-    return password.length >= 8;
   };
 
   return (
@@ -106,6 +141,48 @@ function SignInSide() {
               <Typography component="h1" variant="h5">
                 Sign in
               </Typography>
+              <Grid
+                sx={{ mt: 2, mb: 1 }}
+                container
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Grid item>
+                  <Typography component="h4" marginRight={1} variant="h6">
+                    Current User: {user?.email}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Button
+                    onClick={logout}
+                    // fullWidth
+                    variant="contained"
+                  >
+                    Sign Out
+                  </Button>
+                </Grid>
+              </Grid>
+
+              {/* <Button
+                onClick={() => {
+                  signOut(auth)
+                    .then(() => {
+                      // setUser(null);
+                      toast.success("Sign Out Successful!", {
+                        position: "bottom-right",
+                      });
+                    })
+                    .catch((error) => {
+                      console.error("Error signing out", error);
+                    });
+                }}
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Sign Out
+              </Button> */}
+
               <Box
                 component="form"
                 noValidate
@@ -123,8 +200,6 @@ function SignInSide() {
                   autoFocus
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  error={emailError}
-                  helperText={emailError && "Invalid email format"}
                 />
                 <TextField
                   margin="normal"
@@ -137,39 +212,46 @@ function SignInSide() {
                   autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  error={passwordError}
-                  helperText={passwordError && "Invalid password format"}
                 />
                 <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
                   label="Remember me"
                 />
                 <Button
+                  onClick={login}
                   type="submit"
                   fullWidth
                   variant="contained"
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Sign In
+                  {buttonLabel}
                 </Button>
-                <Grid container>
-                  <Grid item xs>
-                    <Link href="#" variant="body2">
-                      Forgot password?
-                    </Link>
+                <Grid
+                  container
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Grid item>
+                    <GoogleButton type="light" onClick={signInWithGoogle} />
                   </Grid>
                   <Grid item>
                     <Link to="/registration" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
+                    <br />
+                    <Link href="#" variant="body2">
+                      Forgot password?
+                    </Link>
                   </Grid>
+                  {/* <Grid item> */}
+
+                  {/* </Grid> */}
                 </Grid>
               </Box>
             </Box>
           </Grid>
         </Grid>
-        <ToastContainer position="bottom-right" />{" "}
-        {/* Display ToastContainer at the bottom-right */}
+        <ToastContainer position="bottom-right" />
       </ThemeProvider>
     </div>
   );

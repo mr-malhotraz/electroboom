@@ -63,11 +63,12 @@ const ContactUsPage = () => {
                 <Typography variant="h5" gutterBottom>
                   Get in Touch
                 </Typography>
-                <form onSubmit={handleSubmit}>
+                <form action="https://formspree.io/f/xjvdqbzr" method="POST">
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
                       <TextField
                         label="Name"
+                        name="name"
                         variant="outlined"
                         fullWidth
                         required
@@ -76,6 +77,7 @@ const ContactUsPage = () => {
                     <Grid item xs={12}>
                       <TextField
                         label="Email"
+                        name="email"
                         variant="outlined"
                         fullWidth
                         required
@@ -84,6 +86,7 @@ const ContactUsPage = () => {
                     <Grid item xs={12}>
                       <TextField
                         label="Message"
+                        name="message"
                         multiline
                         rows={4}
                         variant="outlined"

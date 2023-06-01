@@ -13,10 +13,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import firebase from "firebase/compat/app";
+import { toast, ToastContainer } from "react-toastify";
 import "firebase/compat/auth";
 import GoogleButton from "react-google-button";
-
-// Your web app's Firebase configuration
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../context/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -46,7 +48,6 @@ const signInWithGoogle = () => {
       console.error("Error signing in with Google", error);
     });
 };
-
 function SignUpSide() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,6 +55,24 @@ function SignUpSide() {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+  const [user, setUser] = useState({});
+
+  onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser);
+  });
+
+  const register = async () => {
+    try {
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+      console.log(user);
+      toast.success("Sign Up Successful!", {
+        position: "bottom-right",
+      });
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.message, { position: "bottom-right" });
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -62,38 +81,6 @@ function SignUpSide() {
     setEmailError(false);
     setPasswordError(false);
     setConfirmPasswordError(false);
-
-    // Validate email format
-    if (!isValidEmail(email)) {
-      setEmailError(true);
-      return;
-    }
-
-    // Validate password format
-    if (!isValidPassword(password)) {
-      setPasswordError(true);
-      return;
-    }
-
-    // Validate confirm password
-    if (password !== confirmPassword) {
-      setConfirmPasswordError(true);
-      return;
-    }
-
-    // Perform sign up logic
-    // ...
-    console.log("Sign up successful");
-    // Redirect to a different page or perform any desired actions
-  };
-
-  const isValidEmail = (email) => {
-    const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
-    return emailRegex.test(email);
-  };
-
-  const isValidPassword = (password) => {
-    return password.length >= 8;
   };
 
   return (
@@ -142,6 +129,10 @@ function SignUpSide() {
               <Typography component="h1" variant="h5">
                 Sign up
               </Typography>
+              <Typography component="h4" variant="h5">
+                Current User: {user?.email}
+              </Typography>
+
               <Box
                 component="form"
                 noValidate
@@ -195,6 +186,7 @@ function SignUpSide() {
                   label="Remember me"
                 />
                 <Button
+                  onClick={register}
                   type="submit"
                   fullWidth
                   variant="contained"
@@ -210,30 +202,14 @@ function SignUpSide() {
                   OR
                 </p> */}
 
-                <GoogleButton type="light" onClick={signInWithGoogle} />
-                {/* <Button
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  onClick={signInWithGoogle}
-                  startIcon={
-                    <Avatar
-                      src="https://www.transparentpng.com/thumb/google-logo/google-logo-png-icon-free-download-SUF63j.png" // Replace with the actual image URL
-                      alt="Google Logo"
-                      sx={{ width: 24, height: 24 }}
-                    />
-                  }
-                  sx={{
-                    mb: 2,
-                    backgroundColor: "#1DA1F2",
-                    "&:hover": {
-                      backgroundColor: "#1A91DA",
-                    },
-                  }}
+                <Grid
+                  container
+                  justifyContent="space-between"
+                  alignItems="center"
                 >
-                  Sign Up with Google
-                </Button> */}
-                <Grid container justifyContent="flex-end">
+                  <Grid item>
+                    <GoogleButton type="light" onClick={signInWithGoogle} />
+                  </Grid>
                   <Grid item>
                     <Link to="/login" variant="body2">
                       Already have an account? Sign in
@@ -245,6 +221,7 @@ function SignUpSide() {
           </Grid>
         </Grid>
       </ThemeProvider>
+      <ToastContainer position="bottom-right" style={{ bottom: "0px" }} />
     </div>
   );
 }
