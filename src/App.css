@@ -114,9 +114,6 @@ input {
   /* background-color: gray;
   background-blend-mode: multiply; */
 }
-.MuiButtonBase-root {
-  /* color: white !important; */
-}
 
 .drawer .MuiButtonBase-root {
   color: black !important;

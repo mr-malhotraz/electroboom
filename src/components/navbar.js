@@ -224,10 +224,7 @@ function Navbar(props) {
             </Typography>
 
             <Button key={"cart.label"} disablePadding>
-              <Link
-                style={{ color: "white", textDecoration: "inherit" }}
-                to={"/shoppingcart"}
-              >
+              <Link sx={{ color: "white" }} to={"/shoppingcart"}>
                 {
                   <Button
                     variant="text"
@@ -249,10 +246,7 @@ function Navbar(props) {
           <Box sx={{ display: { xs: "none", sm: "block" }, color: "white" }}>
             {navItems.map((item) => (
               <Button key={item.label} disablePadding sx={{ color: "white" }}>
-                <Link
-                  style={{ color: "white", textDecoration: "inherit" }}
-                  to={item.path}
-                >
+                <Link style={{ color: "white" }} to={item.path}>
                   {item.label}
                 </Link>
               </Button>
