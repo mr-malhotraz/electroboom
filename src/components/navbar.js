@@ -17,7 +17,6 @@ import Button from "@mui/material/Button";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
-import "./navbar.css";
 import {
   AccountCircle,
   AddShoppingCart,
@@ -41,7 +40,7 @@ const drawerWidth = 240;
 const navItems = [
   {
     label: (
-      <Button variant="text" startIcon={<Home />}>
+      <Button variant="text" startIcon={<Home />} sx={{ color: "white" }}>
         Home
       </Button>
     ),
@@ -49,7 +48,7 @@ const navItems = [
   },
   {
     label: (
-      <Button variant="text" startIcon={<LocalOffer />}>
+      <Button variant="text" startIcon={<LocalOffer />} sx={{ color: "white" }}>
         Offers
       </Button>
     ),
@@ -57,7 +56,7 @@ const navItems = [
   },
   {
     label: (
-      <Button variant="text" startIcon={<LocalMall />}>
+      <Button variant="text" startIcon={<LocalMall />} sx={{ color: "white" }}>
         Shop
       </Button>
     ),
@@ -65,7 +64,11 @@ const navItems = [
   },
   {
     label: (
-      <Button variant="text" startIcon={<AccountCircle />}>
+      <Button
+        variant="text"
+        startIcon={<AccountCircle />}
+        sx={{ color: "white" }}
+      >
         Login
       </Button>
     ),
@@ -74,7 +77,7 @@ const navItems = [
 
   {
     label: (
-      <Button variant="text" startIcon={<Inventory />}>
+      <Button variant="text" startIcon={<Inventory />} sx={{ color: "white" }}>
         Api
       </Button>
     ),
@@ -256,7 +259,6 @@ function Navbar(props) {
               <Link
                 sx={{
                   color: "white",
-                  textDecoration: "inherit",
                 }}
                 to={"/shoppingcart"}
               >
@@ -265,7 +267,7 @@ function Navbar(props) {
                     variant="text"
                     startIcon={
                       <Badge badgeContent={items.length} color="primary">
-                        <ShoppingCartIcon />
+                        <ShoppingCartIcon sx={{ color: "white" }} />
                       </Badge>
                     }
                   ></Button>
