@@ -185,6 +185,7 @@ function Navbar(props) {
       <CssBaseline />
       <AppBar
         position="static"
+        className="nav-label"
         sx={{
           bgcolor: "black",
           position: "fixed",
@@ -249,18 +250,13 @@ function Navbar(props) {
           <Box sx={{ display: { xs: "none", sm: "block" }, color: "white" }}>
             {navItems.map((item) => (
               <Button key={item.label} disablePadding sx={{ color: "white" }}>
-                <Link
-                  className="nav-label"
-                  style={{ color: "white" }}
-                  to={item.path}
-                >
+                <Link style={{ color: "white" }} to={item.path}>
                   {item.label}
                 </Link>
               </Button>
             ))}
             <Button key={"cart.label"} disablePadding>
               <Link
-                className="nav-label"
                 sx={{
                   color: "white",
                   textDecoration: "inherit",
