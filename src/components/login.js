@@ -25,27 +25,29 @@ import {
 import { auth } from "../context/firebase";
 import GoogleButton from "react-google-button";
 
-const signInWithGoogle = () => {
-  const provider = new firebase.auth.GoogleAuthProvider();
-
-  firebase
-    .auth()
-    .signInWithPopup(provider)
-    .then((result) => {
-      // Handle successful sign-in with Google
-      console.log("Sign in with Google successful", result.user);
-    })
-    .catch((error) => {
-      // Handle sign-in with Google error
-      console.error("Error signing in with Google", error);
-    });
-};
-
 function SignInSide() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [buttonLabel, setButtonLabel] = useState("Sign In");
   const [user, setUser] = useState(null);
+
+  const signInWithGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then((result) => {
+        // Handle successful sign-in with Google
+        console.log("Sign in with Google successful", result.user);
+        toast.success(`Welcome, ${result.user.displayName}!`);
+      })
+      .catch((error) => {
+        // Handle sign-in with Google error
+        console.error("Error signing in with Google", error);
+        toast.error("Error signing in with Google", error);
+      });
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -141,7 +143,8 @@ function SignInSide() {
               <Typography component="h1" variant="h5">
                 Sign in
               </Typography>
-              <Grid
+
+              {/* <Grid
                 sx={{ mt: 2, mb: 1 }}
                 container
                 justifyContent="center"
@@ -149,7 +152,7 @@ function SignInSide() {
               >
                 <Grid item>
                   <Typography component="h4" marginRight={1} variant="h6">
-                    Current User: {user?.email}
+                    Current User: {user?.displayName}
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -161,7 +164,7 @@ function SignInSide() {
                     Sign Out
                   </Button>
                 </Grid>
-              </Grid>
+              </Grid> */}
 
               {/* <Button
                 onClick={() => {

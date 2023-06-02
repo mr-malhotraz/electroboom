@@ -16,7 +16,7 @@ import firebase from "firebase/compat/app";
 import { toast, ToastContainer } from "react-toastify";
 import "firebase/compat/auth";
 import GoogleButton from "react-google-button";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../context/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -29,7 +29,6 @@ const firebaseConfig = {
   messagingSenderId: "997835859524",
   appId: "1:997835859524:web:bc2bf2981ad3e7ac63fe11",
 };
-
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
@@ -48,10 +47,13 @@ const signInWithGoogle = () => {
       console.error("Error signing in with Google", error);
     });
 };
+
 function SignUpSide() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [nameError, setNameError] = useState(false);
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
@@ -63,7 +65,20 @@ function SignUpSide() {
 
   const register = async () => {
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
+      if (name.trim() === "") {
+        setNameError(true);
+        return;
+      }
+
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // Set the display name for the user
+      await updateProfile(user, { displayName: name });
       console.log(user);
       toast.success("Sign Up Successful!", {
         position: "bottom-right",
@@ -78,9 +93,18 @@ function SignUpSide() {
     event.preventDefault();
 
     // Reset previous error states
+    setNameError(false);
     setEmailError(false);
     setPasswordError(false);
     setConfirmPasswordError(false);
+
+    // Validate name
+    if (name.trim() === "") {
+      setNameError(true);
+      return;
+    }
+
+    // Rest of the form submission logic
   };
 
   return (
@@ -118,6 +142,7 @@ function SignUpSide() {
               sx={{
                 my: 8,
                 mx: 4,
+                mt: 7,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -129,9 +154,9 @@ function SignUpSide() {
               <Typography component="h1" variant="h5">
                 Sign up
               </Typography>
-              <Typography component="h4" variant="h5">
+              {/* <Typography component="h4" variant="h5">
                 Current User: {user?.email}
-              </Typography>
+              </Typography> */}
 
               <Box
                 component="form"
@@ -143,11 +168,24 @@ function SignUpSide() {
                   margin="normal"
                   required
                   fullWidth
+                  id="name"
+                  label="Name"
+                  name="name"
+                  autoComplete="name"
+                  autoFocus
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  error={nameError}
+                  helperText={nameError && "Name is required"}
+                />
+                <TextField
+                  margin="normal"
+                  required
+                  fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  autoFocus
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   error={emailError}

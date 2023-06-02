@@ -24,6 +24,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Tooltip from "@mui/material/Tooltip";
 import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
+import { auth } from "../context/firebase";
+import firebase from "firebase/compat/app";
+
 import Logout from "@mui/icons-material/Logout";
 import {
   AccountCircle,
@@ -34,6 +37,9 @@ import {
 import { Inventory } from "@mui/icons-material";
 import { Badge } from "@mui/material";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 // import { ButtonBase } from "@mui/material";
 
@@ -116,6 +122,23 @@ function Navbar(props) {
   const { window } = props;
   const items = useSelector((state) => state.cart);
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const handleSignOut = async () => {
+    if (!firebase.auth().currentUser) {
+      toast.warning("You are already signed out", {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    } else {
+      try {
+        await auth.signOut();
+        toast.success("Signed Out Successfully");
+      } catch (error) {
+        toast.error("Error signing out: " + error.message);
+      }
+    }
+    setAnchorEl(null);
+  };
 
   // Account Menu
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -130,6 +153,14 @@ function Navbar(props) {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+    });
+
+    return unsubscribe;
+  }, []);
 
   const drawer = (
     <Box
@@ -294,7 +325,33 @@ function Navbar(props) {
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
               >
-                <Avatar sx={{ width: 32, height: 32 }}></Avatar>
+                {currentUser ? (
+                  <Avatar
+                    src={currentUser.photoURL}
+                    alt={currentUser.displayName}
+                    sx={{ width: 32, height: 32 }}
+                  />
+                ) : (
+                  <Avatar sx={{ width: 32, height: 32 }} />
+                )}
+
+                {/* to add the first letter if no Profile pic */}
+
+                {/* {currentUser ? (
+  currentUser.photoURL ? (
+    <Avatar
+      src={currentUser.photoURL}
+      alt={currentUser.displayName}
+      sx={{ width: 32, height: 32 }}
+    />
+  ) : (
+    <Avatar sx={{ width: 32, height: 32 }}>
+      {currentUser.displayName.slice(0, 2).toUpperCase()}
+    </Avatar>
+  )
+) : (
+  <Avatar sx={{ width: 32, height: 32 }} />
+)} */}
               </IconButton>
             </Tooltip>
             <Menu
@@ -347,13 +404,21 @@ function Navbar(props) {
                 </ListItemIcon>
                 Add another account
               </MenuItem>
+              {currentUser && (
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <AccountCircle fontSize="small" />
+                  </ListItemIcon>
+                  {currentUser.displayName}
+                </MenuItem>
+              )}
               <MenuItem onClick={handleClose}>
                 <ListItemIcon>
                   <Settings fontSize="small" />
                 </ListItemIcon>
                 Settings
               </MenuItem>
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={handleSignOut}>
                 <ListItemIcon>
                   <Logout fontSize="small" />
                 </ListItemIcon>
