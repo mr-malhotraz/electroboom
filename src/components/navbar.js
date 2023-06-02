@@ -85,6 +85,19 @@ const navItems = [
     ),
     path: "/api",
   },
+  // {
+  //   label: (
+  //     <Button
+  //       variant="text"
+  //       startIcon={
+  //         <Badge badgeContent={0} color="primary">
+  //           <ShoppingCartIcon />
+  //         </Badge>
+  //       }
+  //     ></Button>
+  //   ),
+  //   path: "/shoppingcart",
+  // },
 ];
 
 const theme = createTheme();
@@ -159,7 +172,22 @@ function Navbar(props) {
               textAlign: "center",
             }}
             to={"/shoppingcart"}
-          ></Link>
+          >
+            {/* <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText
+                primary={
+                  <Button
+                    variant="text"
+                    startIcon={
+                      <Badge badgeContent={items.length} color="primary">
+                        <ShoppingCartIcon />
+                      </Badge>
+                    }
+                  ></Button>
+                }
+              />
+            </ListItemButton> */}
+          </Link>
         </ListItem>
       </List>
     </Box>
@@ -172,10 +200,10 @@ function Navbar(props) {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar
-        position="fixed"
         sx={{
           bgcolor: "black",
-          zIndex: 1100,
+          zIndex: 9999,
+          position: "fixed",
         }}
         component="nav"
       >
@@ -257,88 +285,81 @@ function Navbar(props) {
                 }
               </Link>
             </Button>
-            <Button>
-              <Tooltip title="Account settings">
-                <IconButton
-                  onClick={handleClick}
-                  size="small"
-                  aria-controls={open ? "account-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                >
-                  <Avatar sx={{ width: 32, height: 32 }}></Avatar>
-                </IconButton>
-              </Tooltip>
-              <Menu
-                anchorEl={anchorEl}
-                id="account-menu"
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={open}
-                onClose={handleClose}
-                onClick={handleClose}
-                PaperProps={{
-                  elevation: 0,
-                  sx: {
-                    overflow: "visible",
-                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                    mt: 2.5,
-                    "& .MuiAvatar-root": {
-                      width: 32,
-                      height: 32,
-                      ml: -0.5,
-                      mr: 1,
-                    },
-                    "&:before": {
-                      content: '""',
-                      display: "block",
-                      position: "absolute",
-                      top: 0,
-                      right: 14,
-                      width: 10,
-                      height: 10,
-                      bgcolor: "background.paper",
-                      transform: "translateY(-50%) rotate(45deg)",
-                      zIndex: 0,
-                    },
-                  },
-                }}
-                // transformOrigin={{ horizontal: "right", vertical: "top" }}
-                // anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            <Tooltip title="Account settings">
+              <IconButton
+                onClick={handleClick}
+                size="small"
+                sx={{}}
+                aria-controls={open ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
               >
-                <MenuItem onClick={handleClose}>
-                  <Avatar /> Profile
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <Avatar /> My account
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={handleClose}>
-                  <ListItemIcon>
-                    <PersonAdd fontSize="small" />
-                  </ListItemIcon>
-                  Add another account
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <ListItemIcon>
-                    <Settings fontSize="small" />
-                  </ListItemIcon>
-                  Settings
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                  <ListItemIcon>
-                    <Logout fontSize="small" />
-                  </ListItemIcon>
-                  Logout
-                </MenuItem>
-              </Menu>
-            </Button>
+                <Avatar sx={{ width: 32, height: 32 }}></Avatar>
+              </IconButton>
+            </Tooltip>
+            <Menu
+              anchorEl={anchorEl}
+              id="account-menu"
+              open={open}
+              onClose={handleClose}
+              onClick={handleClose}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: "visible",
+                  filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                  mt: 2.5,
+                  "& .MuiAvatar-root": {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  "&:before": {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: "background.paper",
+                    transform: "translateY(-50%) rotate(45deg)",
+                    zIndex: 0,
+                  },
+                },
+              }}
+              // transformOrigin={{ horizontal: "right", vertical: "top" }}
+              // anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            >
+              <MenuItem onClick={handleClose}>
+                <Avatar /> Profile
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Avatar /> My account
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <PersonAdd fontSize="small" />
+                </ListItemIcon>
+                Add another account
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <Settings fontSize="small" />
+                </ListItemIcon>
+                Settings
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <Logout fontSize="small" />
+                </ListItemIcon>
+                Logout
+              </MenuItem>
+            </Menu>
           </Box>
         </Toolbar>
       </AppBar>
