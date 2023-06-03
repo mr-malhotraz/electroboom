@@ -77,12 +77,20 @@ function SignUpSide() {
       );
       const user = userCredential.user;
 
+      // const resetForm = () => {
+      //   setEmail("");
+      //   setName("");
+      //   setPassword("");
+      // };
+
       // Set the display name for the user
       await updateProfile(user, { displayName: name });
       console.log(user);
       toast.success("Sign Up Successful!", {
         position: "bottom-right",
       });
+
+      // resetForm();
     } catch (error) {
       console.log(error.message);
       toast.error(error.message, { position: "bottom-right" });

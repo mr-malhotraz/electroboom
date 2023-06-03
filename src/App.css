@@ -103,6 +103,11 @@ input {
     scrollbar-width: 0px;
   }
 }
+@media screen and (min-width: 480px) {
+  body {
+    scrollbar-width: 0px;
+  }
+}
 
 .api {
   padding-top: 100px;

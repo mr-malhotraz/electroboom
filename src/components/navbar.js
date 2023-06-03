@@ -39,7 +39,7 @@ import { Badge } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 // import { ButtonBase } from "@mui/material";
 
@@ -70,18 +70,18 @@ const navItems = [
     ),
     path: "/Product",
   },
-  {
-    label: (
-      <Button
-        variant="text"
-        startIcon={<AccountCircle />}
-        sx={{ color: "white" }}
-      >
-        Login
-      </Button>
-    ),
-    path: "/login",
-  },
+  // {
+  //   label: (
+  //     <Button
+  //       variant="text"
+  //       startIcon={<AccountCircle />}
+  //       sx={{ color: "white" }}
+  //     >
+  //       Login
+  //     </Button>
+  //   ),
+  //   path: "/login",
+  // },
 
   {
     label: (
@@ -126,7 +126,7 @@ function Navbar(props) {
 
   const handleSignOut = async () => {
     if (!firebase.auth().currentUser) {
-      toast.warning("You are already signed out", {
+      toast.warning("You are not signed in!", {
         position: toast.POSITION.BOTTOM_RIGHT,
       });
     } else {
@@ -334,24 +334,6 @@ function Navbar(props) {
                 ) : (
                   <Avatar sx={{ width: 32, height: 32 }} />
                 )}
-
-                {/* to add the first letter if no Profile pic */}
-
-                {/* {currentUser ? (
-  currentUser.photoURL ? (
-    <Avatar
-      src={currentUser.photoURL}
-      alt={currentUser.displayName}
-      sx={{ width: 32, height: 32 }}
-    />
-  ) : (
-    <Avatar sx={{ width: 32, height: 32 }}>
-      {currentUser.displayName.slice(0, 2).toUpperCase()}
-    </Avatar>
-  )
-) : (
-  <Avatar sx={{ width: 32, height: 32 }} />
-)} */}
               </IconButton>
             </Tooltip>
             <Menu
@@ -388,9 +370,32 @@ function Navbar(props) {
                   },
                 },
               }}
+              disableScrollLock
               // transformOrigin={{ horizontal: "right", vertical: "top" }}
               // anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
+              {/* <MenuItem item sx={{ display: "flex", justifyContent: "center" }}> */}
+              <Link
+                style={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "10px",
+                  marginBottom: "8px",
+                }}
+                to="/login"
+              >
+                <Button
+                  size="large"
+                  color="secondary"
+                  variant="outlined"
+                  startIcon={<AccountCircle />}
+                >
+                  Login
+                </Button>
+              </Link>
+              {/* </MenuItem> */}
               <MenuItem onClick={handleClose}>
                 <Avatar /> Profile
               </MenuItem>
@@ -449,6 +454,7 @@ function Navbar(props) {
           {drawer}
         </Drawer>
       </Box>
+      <ToastContainer position="bottom-right" style={{ bottom: "0px" }} />
     </Box>
   );
 }

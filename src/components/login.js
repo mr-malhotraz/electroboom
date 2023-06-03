@@ -24,6 +24,14 @@ import {
 } from "firebase/auth";
 import { auth } from "../context/firebase";
 import GoogleButton from "react-google-button";
+import { GithubLoginButton } from "react-social-login-buttons";
+import { getAuth } from "firebase/auth";
+import { GoogleLoginButton } from "react-social-login-buttons";
+
+const auth1 = getAuth();
+auth1.languageCode = "it";
+// To apply the default browser preference instead of explicitly setting it.
+// firebase.auth().useDeviceLanguage();
 
 function SignInSide() {
   const [email, setEmail] = useState("");
@@ -75,10 +83,12 @@ function SignInSide() {
     }, 1000);
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
+
       console.log(user);
       toast.success("Sign In Successful!", {
         position: "bottom-right",
       });
+      resetForm();
     } catch (error) {
       console.log(error.message);
       toast.error(error.message, { position: "bottom-right" });
@@ -87,9 +97,9 @@ function SignInSide() {
 
   const logout = async () => {
     await signOut(auth);
-    toast.success("Sign Out Successful!", {
-      position: "bottom-right",
-    });
+    // toast.success("Sign Out Successful!", {
+    //   position: "bottom-right",
+    // });
     resetForm(); // Reset the form after successful sign-out
   };
 
@@ -237,6 +247,7 @@ function SignInSide() {
                   <Grid item>
                     <GoogleButton type="light" onClick={signInWithGoogle} />
                   </Grid>
+
                   <Grid item>
                     <Link to="/registration" variant="body2">
                       {"Don't have an account? Sign Up"}
@@ -254,7 +265,7 @@ function SignInSide() {
             </Box>
           </Grid>
         </Grid>
-        <ToastContainer position="bottom-right" />
+        {/* <ToastContainer position="bottom-right" /> */}
       </ThemeProvider>
     </div>
   );
