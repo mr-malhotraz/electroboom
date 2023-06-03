@@ -83,14 +83,14 @@ const navItems = [
   //   path: "/login",
   // },
 
-  {
-    label: (
-      <Button variant="text" startIcon={<Inventory />} sx={{ color: "white" }}>
-        Api
-      </Button>
-    ),
-    path: "/api",
-  },
+  // {
+  //   label: (
+  //     <Button variant="text" startIcon={<Inventory />} sx={{ color: "white" }}>
+  //       Api
+  //     </Button>
+  //   ),
+  //   path: "/api",
+  // },
   // {
   //   label: (
   //     <Button
@@ -170,7 +170,7 @@ function Navbar(props) {
     >
       <Typography variant="h6" sx={{ my: 2 }}>
         <img src="images/logo.png" className="logo-img" />
-        ℮lectroβoom
+        ℮ctroβoom
       </Typography>
       <Divider />
       <List>
@@ -253,14 +253,14 @@ function Navbar(props) {
             <img src="images/logo.png" className="logo-img" />
 
             <Typography
-              variant="h5"
-              noWrap
+              variant="h6"
+              // noWrap
               component="a"
               href="/"
               sx={{
                 flexGrow: 1,
                 fontWeight: 700,
-                letterSpacing: ".2rem",
+                letterSpacing: ".05rem",
                 color: "inherit",
                 textDecoration: "none",
                 display: { xs: "", sm: "block" },
@@ -287,6 +287,29 @@ function Navbar(props) {
                 }
               </Link>
             </Button>
+
+            <Tooltip title="Account settings">
+              <IconButton
+                onClick={handleClick}
+                size="small"
+                sx={{
+                  display: { md: "none", sm: "none", lg: "none" },
+                }}
+                aria-controls={open ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+              >
+                {currentUser ? (
+                  <Avatar
+                    src={currentUser.photoURL}
+                    alt={currentUser.displayName}
+                    sx={{ width: 32, height: 32 }}
+                  />
+                ) : (
+                  <Avatar sx={{ width: 32, height: 32 }} />
+                )}
+              </IconButton>
+            </Tooltip>
           </ThemeProvider>
 
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
@@ -382,6 +405,8 @@ function Navbar(props) {
                   display: "flex",
                   justifyContent: "center",
                   marginTop: "10px",
+                  marginLeft: "30px",
+                  marginRight: "30px",
                   marginBottom: "8px",
                 }}
                 to="/login"
@@ -399,16 +424,16 @@ function Navbar(props) {
               <MenuItem onClick={handleClose}>
                 <Avatar /> Profile
               </MenuItem>
-              <MenuItem onClick={handleClose}>
+              {/* <MenuItem onClick={handleClose}>
                 <Avatar /> My account
-              </MenuItem>
+              </MenuItem> */}
               <Divider />
-              <MenuItem onClick={handleClose}>
+              {/* <MenuItem onClick={handleClose}>
                 <ListItemIcon>
                   <PersonAdd fontSize="small" />
                 </ListItemIcon>
                 Add another account
-              </MenuItem>
+              </MenuItem> */}
               {currentUser && (
                 <MenuItem onClick={handleClose}>
                   <ListItemIcon>
