@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -59,9 +59,20 @@ function SignUpSide() {
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
   const [user, setUser] = useState({});
 
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser);
-  });
+  // onAuthStateChanged(auth, (currentUser) => {
+  //   setUser(currentUser);
+  // });
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => {
+      // Cleanup function to unsubscribe from the listener
+      unsubscribe();
+    };
+  }, []);
 
   const register = async () => {
     try {
@@ -77,11 +88,13 @@ function SignUpSide() {
       );
       const user = userCredential.user;
 
-      // const resetForm = () => {
-      //   setEmail("");
-      //   setName("");
-      //   setPassword("");
-      // };
+      const resetForm = () => {
+        setEmail("");
+        setName("");
+        setPassword("");
+        setPassword("");
+        setConfirmPassword("");
+      };
 
       // Set the display name for the user
       await updateProfile(user, { displayName: name });
@@ -90,7 +103,7 @@ function SignUpSide() {
         position: "bottom-right",
       });
 
-      // resetForm();
+      resetForm();
     } catch (error) {
       console.log(error.message);
       toast.error(error.message, { position: "bottom-right" });

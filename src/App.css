@@ -102,6 +102,10 @@ input {
   body {
     scrollbar-width: 0px;
   }
+  .proimg {
+    height: 20px;
+    width: 20px;
+  }
 }
 @media screen and (min-width: 480px) {
   body {
@@ -180,4 +184,15 @@ input {
   /* background-image: url("/public/images/abstract-geometric-square-white-background-light-shadow_51543-426.avif"); */
   background-image: url("/public/images/abstract-geometric-square-white-background-light-shadow_51543-426.avif");
   background-size: cover;
+}
+
+@media screen and (min-width: 390px) {
+  .proimg {
+    height: 60px;
+    width: 60px;
+  }
+}
+
+.slick-dots {
+  display: none;
 }

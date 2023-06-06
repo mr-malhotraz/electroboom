@@ -4,11 +4,14 @@ import MultiItemCarousel from "./categories";
 import Offers from "./offers";
 import "./home.css";
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { Typography } from "@mui/material";
 
 class Home extends React.Component {
   render() {
     var settings = {
-      dots: true,
+      dots: false,
       infinite: false,
       speed: 500,
       slidesToShow: 4,
@@ -21,7 +24,6 @@ class Home extends React.Component {
             slidesToShow: 3,
             slidesToScroll: 3,
             infinite: true,
-            dots: true,
           },
         },
         {
@@ -38,6 +40,7 @@ class Home extends React.Component {
           breakpoint: 480,
           settings: {
             slidesToShow: 1.5,
+            dots: false,
             arrows: false,
             slidesToScroll: 1,
           },
@@ -62,13 +65,14 @@ class Home extends React.Component {
           </div> */}
 
             <h2 className="  new-products  head">New at ElectroBoom :</h2>
-
-            <div className="row new-products mt-5 d-flex justify-content-evenly align-items-center">
-              <div className="new-products mb-4 img col-md-6 col-sm-6">
-                <img className="" src="images/new2.webp" />
-              </div>
-              <div className="new-products mb-4 col-md-6 col-sm-6 img ">
-                <img className="" src="images/vivo.webp" />
+            <div className=" container new-products mt-5 ">
+              <div className="row d-flex  justify-content-evenly align-items-center">
+                <div className="new-products mb-4 img col-md-6 col-sm-6">
+                  <img className="" src="images/new2.webp" />
+                </div>
+                <div className="new-products mb-4 col-md-6 col-sm-6 img ">
+                  <img className="" src="images/vivo.webp" />
+                </div>
               </div>
             </div>
             {/* <div className="row mb-4 new-products-n d-flex justify-content-evenly align-items-center">

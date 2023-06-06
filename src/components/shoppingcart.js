@@ -13,7 +13,7 @@ import {
   Paper,
 } from "@mui/material";
 import { removeItem, updateQuantity } from "../redux/slices/cartslice";
-import { Add, Remove } from "@mui/icons-material";
+import { Add, Delete, Remove } from "@mui/icons-material";
 
 function ShoppingCartDemo() {
   const cartItems = useSelector((state) => state.cart);
@@ -62,7 +62,11 @@ function ShoppingCartDemo() {
                       <Table>
                         <TableHead sx={{ backgroundColor: "primary.main" }}>
                           <TableRow>
-                            <TableCell sx={{ color: "common.white" }}>
+                            <TableCell
+                              sx={{
+                                color: "common.white",
+                              }}
+                            >
                               Image
                             </TableCell>
                             <TableCell sx={{ color: "common.white" }}>
@@ -71,7 +75,12 @@ function ShoppingCartDemo() {
                             <TableCell sx={{ color: "common.white" }}>
                               Price
                             </TableCell>
-                            <TableCell sx={{ color: "common.white" }}>
+                            <TableCell
+                              sx={{
+                                color: "common.white",
+                                display: { xs: "none" },
+                              }}
+                            >
                               Quantity
                             </TableCell>
                             <TableCell></TableCell>
@@ -82,6 +91,7 @@ function ShoppingCartDemo() {
                             <TableRow key={item.id}>
                               <TableCell>
                                 <img
+                                  className="proimg"
                                   src={item.image}
                                   alt={item.title}
                                   style={{ maxWidth: "100px" }}
@@ -97,7 +107,12 @@ function ShoppingCartDemo() {
                                   ₹ {item.price * item.quantity}
                                 </Typography>
                               </TableCell>
-                              <TableCell>
+                              <TableCell
+                                sx={{
+                                  color: "common.white",
+                                  display: { xs: "none" },
+                                }}
+                              >
                                 <div className="quantity-container">
                                   <Button
                                     className="quantity-button"
@@ -126,13 +141,17 @@ function ShoppingCartDemo() {
                                 </div>
                               </TableCell>
                               <TableCell>
-                                <Button
+                                {/* <Button
                                   variant="contained"
                                   color="error"
                                   onClick={() => handleRemoveItem(item.id)}
                                 >
                                   Remove
-                                </Button>
+                                </Button> */}
+                                <Delete
+                                  color="error"
+                                  onClick={() => handleRemoveItem(item.id)}
+                                />
                               </TableCell>
                             </TableRow>
                           ))}

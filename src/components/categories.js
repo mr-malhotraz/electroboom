@@ -39,6 +39,7 @@ class MultiItemCarousel extends React.Component {
           settings: {
             slidesToShow: 1.5,
             arrows: false,
+            dots: false,
             slidesToScroll: 1,
           },
         },
